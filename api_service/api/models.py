@@ -16,3 +16,12 @@ class UserRequestHistory(models.Model):
     low = models.DecimalField(max_digits=10, decimal_places=2)
     close = models.DecimalField(max_digits=10, decimal_places=2)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = "User Request History"
+        verbose_name_plural = "User Requests"
+        ordering = ["-date"]
+
+    def __str__(self):
+        return f"{self.user} requested {self.symbol} at {self.date}. " \
+               f"H: {self.high}, L: {self.low}, O: {self.open}, C {self.close}"
