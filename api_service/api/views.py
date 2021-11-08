@@ -58,6 +58,16 @@ class HistoryView(generics.ListAPIView):
     queryset = UserRequestHistory.objects.all()
     serializer_class = UserRequestHistorySerializer
     # TODO: Filter the queryset so that we get the records for the user making the request.
+    paginate_by = 100
+
+    def get_queryset(self):
+        """
+        Get queryset by authenticated user
+        """
+        # use `super` to get request.user
+        queryset = super(HistoryView, self).get_queryset()
+        queryset = queryset.filter(user=self.request.user)
+        return queryset.order_by('-date')
 
 
 class StatsView(APIView):
