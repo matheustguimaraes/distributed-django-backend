@@ -4,6 +4,7 @@ import json
 import requests
 from dateutil import parser as dp
 from rest_framework import generics, status, viewsets
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -21,13 +22,16 @@ class StockView(APIView):
 
     def get(self, request, *args, **kwargs):
         stock_code = request.query_params.get('q')
-        request_url = f'http://localhost:8000/stock?q={stock_code}'
 
+        if stock_code is None:
+            return Response({'error': 'Stock symbol was not provided.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        request_url = f'http://localhost:8000/stock?q={stock_code}'
         response = requests.get(request_url)
 
         if not request.user.is_authenticated:
-            error_msg = {'error': 'Please Authenticate to continue.'}
-            return Response(error_msg, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+            error_msg = {'error': 'JWT Authentication credentials were not provided.'}
+            return Response(error_msg, status=status.HTTP_403_FORBIDDEN)
 
         if response.status_code == 400:
             # json.loads is used to avoid parsing data to JSON twice
@@ -48,26 +52,23 @@ class StockView(APIView):
         if user_history_serializer.is_valid():
             user_history_serializer.save()
 
-        return Response(json.loads(response.text), status=status.HTTP_200_OK)
+        return Response(user_history_serializer.data)
 
 
 class HistoryView(generics.ListAPIView):
     """
     Returns queries made by current user.
     """
-    queryset = UserRequestHistory.objects.all()
+    permission_classes = [IsAuthenticated, ]
     serializer_class = UserRequestHistorySerializer
-    # TODO: Filter the queryset so that we get the records for the user making the request.
-    paginate_by = 100
 
     def get_queryset(self):
         """
         Get queryset by authenticated user
         """
-        # use `super` to get request.user
-        queryset = super(HistoryView, self).get_queryset()
-        queryset = queryset.filter(user=self.request.user)
-        return queryset.order_by('-date')
+        user = self.request.user
+        return UserRequestHistory.objects.filter(user=user)
+
 
 
 class StatsView(APIView):
