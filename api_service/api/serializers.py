@@ -8,4 +8,5 @@ from api.models import UserRequestHistory
 class UserRequestHistorySerializer(serializers.ModelSerializer):
     class Meta:
         model = UserRequestHistory
-        exclude = ['id', 'user']
+        # exclude = ['id', 'user']
+        exclude = ['id', ]
