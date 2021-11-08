@@ -3,8 +3,9 @@ import json
 
 import requests
 from dateutil import parser as dp
-from rest_framework import generics, status, viewsets
-from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from django.db.models import Count
+from rest_framework import generics, status
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -41,18 +42,18 @@ class StockView(APIView):
 
         # todo: move logic to serializers
         stock_quotes = json.loads(response.text)
-        quotes_lowercase_key = {key.lower(): value for key, value in stock_quotes.items()}
-        date_field_parse_format = f"{quotes_lowercase_key['date']} {quotes_lowercase_key['time']}"
+        stock_quotes = {key.lower(): value for key, value in stock_quotes.items()}
+        date_field_format = f"{stock_quotes['date']} {stock_quotes['time']}"
 
-        # date = parse_datetime(date_field_parse_format)
-        quotes_lowercase_key['date'] = dp.parse(date_field_parse_format)
-        quotes_lowercase_key['user'] = request.user.id
+        # date = parse_datetime(date_field_format)
+        stock_quotes['date'] = dp.parse(date_field_format)
+        stock_quotes['user'] = request.user.id
 
-        user_history_serializer = UserRequestHistorySerializer(data=quotes_lowercase_key)
-        if user_history_serializer.is_valid():
-            user_history_serializer.save()
+        user_history = UserRequestHistorySerializer(data=stock_quotes)
+        if user_history.is_valid(raise_exception=True):
+            user_history.save()
 
-        return Response(user_history_serializer.data)
+        return Response(user_history.data)
 
 
 class HistoryView(generics.ListAPIView):
@@ -62,7 +63,7 @@ class HistoryView(generics.ListAPIView):
     permission_classes = [IsAuthenticated, ]
     serializer_class = UserRequestHistorySerializer
 
-    def get_queryset(self):
+    def get_queryset(self, *args, **kwargs):
         """
         Get queryset by authenticated user
         """
@@ -70,12 +71,17 @@ class HistoryView(generics.ListAPIView):
         return UserRequestHistory.objects.filter(user=user)
 
 
-
 class StatsView(APIView):
     """
     Allows super users to see which are the most queried stocks.
     """
-    # TODO: Implement the query needed to get the top-5 stocks as described in the README, and return
-    # the results to the user.
-    def get(self, request, *args, **kwargs):
-        return Response()
+    permission_classes = [IsAdminUser, ]
+
+    def get(self, request):
+        """
+        Returns the top five most requested stocks
+        """
+        user = request.user
+        stocks_by_time_requested = UserRequestHistory.objects.filter(user=user).values('symbol').annotate(
+            times_requested=Count('symbol')).order_by('-times_requested')[:5]
+        return Response(stocks_by_time_requested)
