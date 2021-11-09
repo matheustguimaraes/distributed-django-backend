@@ -29,12 +29,20 @@ class StockView(APIView):
             error_msg = {'error': 'Stock symbol was not provided.'}
             return Response(error_msg, status=status.HTTP_400_BAD_REQUEST)
 
-        request_url = f'http://localhost:8000/stock?q={stock_code}'
+        # use docker container name to request /stock endpoint
+        request_url = f'http://stock:8000/stock?q={stock_code}'
         response = requests.get(request_url)
+
+        if response.status_code == 401:
+            error_msg = {'error': 'JWT Authentication credentials were not provided.'}
+            return Response(error_msg, status=status.HTTP_401_UNAUTHORIZED)
 
         if response.status_code == 400:
             error_msg = {'error': 'Request has incorrect stock symbol.'}
             return Response(error_msg, status=status.HTTP_400_BAD_REQUEST)
+
+        if response.status_code != 200:
+            return Response(response, status=response.status_code)
 
         # convert keys (Open, Close, High, Low) to lowercase
         json_response = {key.lower(): value for key, value in response.json().items()}

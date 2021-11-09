@@ -1,0 +1,40 @@
+version: '3'
+
+#networks:
+#   jobsity_network:
+#     external: true
+
+services:
+  #  rabbitmq:
+  #    image: "rabbitmq:3-management"
+  #    ports:
+  #      - "15672:15672"
+  #      - "5672:5672"
+  #    networks:
+  #      - api
+
+  apimigration:
+    build: ./api_service
+    command: >
+      sh -c "cd ./api_service && python manage.py makemigrations && python manage.py migrate"
+    container_name: apimigration
+    volumes:
+      - .:/api
+
+  stock:
+    build: ./stock_service
+    command: sh -c "cd ./stock_service && python manage.py runserver 0.0.0.0:8000"
+    container_name: stock
+    volumes:
+      - .:/stock
+    ports:
+      - "8000:8000"
+
+  api:
+    build: ./api_service
+    command: sh -c "cd ./api_service && python manage.py runserver 0.0.0.0:8001"
+    container_name: api
+    volumes:
+      - .:/api
+    ports:
+      - "8001:8001"
