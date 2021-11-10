@@ -28,17 +28,17 @@ docker-compose --version # test installation
 
 ### Django
 
-Use Docker Compose to install both Django projects `api_service` and `stock_service`:
+Use Docker Compose to install and start both Django projects `api_service` and `stock_service`:
 
 ```shell
-docker-compose build # build docker containers
-docker-compose up    # run both services
+docker-compose build # build containers
+docker-compose up    # start services
 ```
 
-This commands will create two different running containers:
+This commands will create two different running containers. To verify that containers started successfully: 
 
 ```shell
-sudo docker ps       # check if containers started successfully
+sudo docker ps
 ```
 
 ```
@@ -50,14 +50,14 @@ b48631b42498   jobsity-django-challenge_stock   "sh -c 'cd ./stock_s…"   45 mi
 Please make the sure ports `8000` and `8001` are not being used by another process. These ports will be used by:
 
 - `http://0.0.0.0:8000`: internal API service `stock_service`
-- `http://0.0.0.0:8001`: user-facing API service `api_service`.
+- `http://0.0.0.0:8001`: user-facing API service `api_service`
 
 Two SQLite databases will be created. The first one to store `api_service` requests. The second to store `stock_service`
 unit tests.
 
 ## Authentication
 
-Before requesting endpoints, please create a superuser and get an JWT token. All user-facing API endpoints have JWT
+Before requesting API endpoints, create a superuser and get a JWT token. All user-facing API endpoints have JWT
 authentication.
 
 ### Create superuser
@@ -68,17 +68,16 @@ docker exec -it api python api_service/manage.py createsuperuser
 
 ### JWT Authentication credentials
 
-To get your JWT Authentication credentials, please visit `https://0.0.0.0/auth/token`, and fill in the username and
-password:
+To get your JWT token, please visit `https://0.0.0.0/auth/token`, and fill in the username and password:
 
 ![JWT credentials](assets/jwt.png)
 
-The `access` variable will return your JWT token.
+You can use `access` to authenticate endpoints for ten hours. After that you need to request another JWT token.
 
 ### CRUD pages
 
-You can also create a user (not superuser) with `https://0.0.0.0/register` (page created for easier authentication and
-testing not superuser endpoints).
+You can also create a user (not superuser) visiting `https://0.0.0.0/register` (page created to facilitate
+authentication and testing of non-superuser endpoints).
 
 ![Register new user](assets/register.png)
 
@@ -88,15 +87,14 @@ Visit the login page at `https://0.0.0.0/login`:
 
 ### Request using Postman
 
-To request endpoints using Postman, download the app at `https://www.postman.com/downloads` and
-export the `postman/jobsity-code-challenge.postman_collection.json` collection.
+To request endpoints using Postman, download the app at `https://www.postman.com/downloads` and export
+the `postman/jobsity-code-challenge.postman_collection.json` collection.
 
 ![Postman collection](assets/postman-collection.png)
 
 To authenticate using Postman, paste your JWT token in `Authorization` > Type `Bearer Token` > `Token`.
 
 ![Paste token](assets/paste-token.png)
-
 
 ## Endpoints
 
@@ -192,7 +190,7 @@ Response
 
 ### API service
 
-To run tests with Docker in the API service:
+To run API service unit tests:
 
 ```shell
 docker exec -it api python api_service/manage.py test api
@@ -210,7 +208,7 @@ OK
 
 ### Stock service
 
-To run tests with Docker in the Stock service:
+To run Stock service unit tests:
 
 ```shell
 docker exec -it stock python stock_service/manage.py test stock_service
@@ -228,7 +226,7 @@ OK
 
 ## Requirements
 
-All required features were finished.
+All required features were completed.
 
 ### API service
 
@@ -248,15 +246,15 @@ requested stocks. \
 :heavy_check_mark: When a stock request is received, this service should query an external API to get the stock
 information. For this challege, use this API: `​https://stooq.com/q/l/?s={stock_code}&f=sd2t2ohlcvn&h&e=csv​`.
 
-### Bonuses
+### Bonus
 
-Finished bonuses features:
+Bonus features:
 
 :heavy_check_mark: Add unit tests for the bot and the main app. \
 :heavy_check_mark: Use JWT instead of basic authentication for endpoints.
 
-Also, not requested:
+Not requested bonus features:
 
-:heavy_check_mark: CRUD created using Django to easier user authentication. \
+:heavy_check_mark: Login, Register and Homepage pages to authenticate user and request JWT token. \
 :heavy_check_mark: Project created with Docker for easier project setup and deploy. \
 :heavy_check_mark: Endpoints documented using Postman.
