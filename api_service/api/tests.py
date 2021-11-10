@@ -1,8 +1,7 @@
 from django.contrib.auth.models import User
 from django.urls import reverse
 from rest_framework import status
-from rest_framework.test import APIClient
-from rest_framework.test import APITestCase
+from rest_framework.test import APIClient, APITestCase
 
 from api.models import UserRequestHistory
 from api.serializers import UserRequestHistorySerializer
