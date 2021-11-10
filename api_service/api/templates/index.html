@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+
+<html>
+{% include 'base.html' %}
+
+<body>
+<div class="container">
+    {% if user.is_authenticated %}
+
+    <h1>You are authenticated, please go to /auth/token and get JWT authentication credentials</h1>
+
+    {% else %}
+
+    {% endif %}
+
+    {% if not user.is_authenticated %}
+    <h1>You are not authenticated, please register or login and get JWT authentication credentials</h1>
+    {% endif %}
+</div>
+</body>
+</html>

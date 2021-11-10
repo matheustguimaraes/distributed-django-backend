@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en-us">
+{% include 'base.html' %}
+<style>
+    .form-signin {
+        max-width: 550px;
+        padding: 15px;
+        margin: 0 auto;
+    }
+</style>
+
+<body>
+<div class="container text-center">
+    <form class="form-signin" id="login_form" method="post">
+        {% csrf_token %} {% comment %} {% load bootstrap %} {% endcomment %}
+
+        <h2 class="form-signin-heading">Login</h2>
+        <br/>
+
+        <label>
+            <input type="text"
+                   name="username"
+                   class="form-control"
+                   placeholder="Username"
+                   value=""
+                   required
+                   autofocus
+            />
+        </label>
+
+        <br/>
+
+        <label>
+            <input type="password"
+                   name="password"
+                   class="form-control"
+                   placeholder="Password"
+                   value=""
+                   required
+            />
+        </label>
+
+        <br/>
+        <button class="btn btn-lg btn-primary btn-block form-signin" type="submit">
+            Login
+        </button>
+        <input type="hidden" name="submit" value="submit"/>
+    </form>
+
+    {% for message in messages %}
+        <p class="alert alert-success" id="messages">{{ message }}</p>
+    {% endfor %}
+
+</div>
+</body>
+</html>
