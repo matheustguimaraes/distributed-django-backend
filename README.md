@@ -55,12 +55,12 @@ Please make the sure ports `8000` and `8001` are not being used by another proce
 Two SQLite databases will be created. The first one to store `api_service` requests. The second to store `stock_service`
 unit tests.
 
-## Using endpoints
+## Authentication
 
 Before requesting endpoints, please create a superuser and get an JWT token. All user-facing API endpoints have JWT
 authentication.
 
-### Create super user
+### Create superuser
 
 ```shell
 docker exec -it api python api_service/manage.py createsuperuser
@@ -86,12 +86,19 @@ Visit the login page at `https://0.0.0.0/login`:
 
 ![Login](assets/login.png)
 
-### Postman
+### Request using Postman
 
 To request endpoints using Postman, download the app at `https://www.postman.com/downloads` and
-export `postman/jobsity-code-challenge.postman_collection.json` collection.
+export the `postman/jobsity-code-challenge.postman_collection.json` collection.
 
 ![Postman collection](assets/postman-collection.png)
+
+To authenticate using Postman, paste your JWT token in `Authorization` > Type `Bearer Token` > `Token`.
+
+![Paste token](assets/paste-token.png)
+
+
+## Endpoints
 
 ### API service
 
@@ -250,6 +257,6 @@ Finished bonuses features:
 
 Also, not requested:
 
-:heavy_check_mark: CRUD created using Django to easier authentication. \
-:heavy_check_mark: Project created with Docker to easier setup. \
+:heavy_check_mark: CRUD created using Django to easier user authentication. \
+:heavy_check_mark: Project created with Docker for easier project setup and deploy. \
 :heavy_check_mark: Endpoints documented using Postman.
