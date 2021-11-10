@@ -1,0 +1,232 @@
+{
+	"info": {
+		"_postman_id": "59cd37b9-34c5-4464-8c19-55ecd08e721f",
+		"name": "jobsity-code-challenge",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "stock-service-api",
+			"item": [
+				{
+					"name": "stock-stooq",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://stooq.com/q/l/?s=AAPL.us&f=sd2t2ohlcvn&e=csv",
+							"protocol": "https",
+							"host": [
+								"stooq",
+								"com"
+							],
+							"path": [
+								"q",
+								"l",
+								""
+							],
+							"query": [
+								{
+									"key": "s",
+									"value": "AAPL.us"
+								},
+								{
+									"key": "f",
+									"value": "sd2t2ohlcvn"
+								},
+								{
+									"key": "e",
+									"value": "csv"
+								},
+								{
+									"key": "e",
+									"value": "json",
+									"disabled": true
+								},
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "stock",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://0.0.0.0:8000/stock?q=aapl.us",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "8000",
+							"path": [
+								"stock"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "aapl.us"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "api_service",
+			"item": [
+				{
+					"name": "jwt-token",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"matheus\",\n    \"password\": \"123456\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://0.0.0.0:8001/auth/token",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "8001",
+							"path": [
+								"auth",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "stock",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjM2NjA3OTg1LCJpYXQiOjE2MzY1NzE5ODUsImp0aSI6ImUwNTdhNjA4MTlmMTRlOTQ5NmJmYzg3Yjk5YmE1ZDRmIiwidXNlcl9pZCI6Mn0.WZX1vNrEHaAbGh7LSR6-bQT4oidqZ0JUO7ctEbHblFo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://0.0.0.0:8001/stock?q=WAFD.US",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "8001",
+							"path": [
+								"stock"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "WAFD.US"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "history",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjM2NjA3OTg1LCJpYXQiOjE2MzY1NzE5ODUsImp0aSI6ImUwNTdhNjA4MTlmMTRlOTQ5NmJmYzg3Yjk5YmE1ZDRmIiwidXNlcl9pZCI6Mn0.WZX1vNrEHaAbGh7LSR6-bQT4oidqZ0JUO7ctEbHblFo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://0.0.0.0:8001/history",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "8001",
+							"path": [
+								"history"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "stats",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjM2NjA3OTg1LCJpYXQiOjE2MzY1NzE5ODUsImp0aSI6ImUwNTdhNjA4MTlmMTRlOTQ5NmJmYzg3Yjk5YmE1ZDRmIiwidXNlcl9pZCI6Mn0.WZX1vNrEHaAbGh7LSR6-bQT4oidqZ0JUO7ctEbHblFo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://0.0.0.0:8001/stats",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "8001",
+							"path": [
+								"stats"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "route",
+			"value": "http://0.0.0.0:8000"
+		}
+	]
+}
