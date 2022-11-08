@@ -1,6 +1,6 @@
 # Python/Django Challenge
 
-Python/Django code challenge proposed by Jobsity.
+Python/Django code challenge proposed by Jobsity. (I passed and got a job offer at the time)
 
 ## Architecture
 
